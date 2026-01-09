@@ -19,6 +19,14 @@ export const metadata: Metadata = {
   title: 'Stilbaai Gallery | Artist Submissions',
   description:
     'Submit your artwork to Stilbaai Gallery for exhibition and sale',
+  robots: {
+    index: false,
+    follow: false,
+    googleBot: {
+      index: false,
+      follow: false,
+    },
+  },
 };
 
 export default function RootLayout({
