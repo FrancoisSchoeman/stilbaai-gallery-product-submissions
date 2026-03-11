@@ -22,7 +22,7 @@ interface ProductNotificationData {
 }
 
 export async function sendProductSubmissionEmail(
-  data: ProductNotificationData
+  data: ProductNotificationData,
 ) {
   const adminEmail = process.env.ADMIN_EMAIL;
 
@@ -34,7 +34,7 @@ export async function sendProductSubmissionEmail(
   try {
     await transporter.sendMail({
       from: `"Stilbaai Gallery" <${process.env.EMAIL_USERNAME}>`,
-      to: adminEmail,
+      to: [adminEmail, 'hello@stilbaaigalery.co.za'],
       subject: `New Artwork Submission: ${data.productTitle}`,
       html: `
         <div style="font-family: 'Georgia', serif; max-width: 600px; margin: 0 auto; padding: 20px;">
