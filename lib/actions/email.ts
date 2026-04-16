@@ -1,6 +1,7 @@
 'use server';
 
 import nodemailer from 'nodemailer';
+import { parseAdminEmails } from '@/lib/admin';
 
 const transporter = nodemailer.createTransport({
   host: process.env.EMAIL_HOST,
@@ -24,17 +25,17 @@ interface ProductNotificationData {
 export async function sendProductSubmissionEmail(
   data: ProductNotificationData,
 ) {
-  const adminEmail = process.env.ADMIN_EMAIL;
+  const adminEmails = parseAdminEmails();
 
-  if (!adminEmail) {
-    console.error('ADMIN_EMAIL not configured');
+  if (!adminEmails.length) {
+    console.error('ADMIN_EMAILS not configured');
     return { error: 'Email configuration error' };
   }
 
   try {
     await transporter.sendMail({
       from: `"Stilbaai Gallery" <${process.env.EMAIL_USERNAME}>`,
-      to: [adminEmail, 'hello@stilbaaigalery.co.za'],
+      to: [...adminEmails, 'hello@stilbaaigalery.co.za'],
       subject: `New Artwork Submission: ${data.productTitle}`,
       html: `
         <div style="font-family: 'Georgia', serif; max-width: 600px; margin: 0 auto; padding: 20px;">

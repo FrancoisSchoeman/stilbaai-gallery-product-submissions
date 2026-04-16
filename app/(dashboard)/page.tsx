@@ -1,5 +1,7 @@
 import { redirect } from 'next/navigation';
 import { getServerSession } from '@/lib/auth-server';
+import { isAdminEmail } from '@/lib/admin';
+import { AdminDashboardCta } from '@/components/admin-dashboard-cta';
 import { db } from '@/lib/db';
 import { userProfiles, productSubmissions } from '@/lib/db/schema';
 import { eq, count } from 'drizzle-orm';
@@ -31,9 +33,12 @@ export default async function DashboardPage() {
     .where(eq(productSubmissions.userId, session.user.id));
 
   const profileComplete = profile?.isComplete ?? false;
+  const isAdmin = isAdminEmail(session.user.email);
 
   return (
     <div className="space-y-8">
+      {isAdmin && <AdminDashboardCta />}
+
       {/* Welcome Header */}
       <div>
         <h1 className="font-serif text-3xl font-semibold text-stone-900">

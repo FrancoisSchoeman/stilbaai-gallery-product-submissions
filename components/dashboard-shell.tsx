@@ -11,12 +11,15 @@ interface DashboardShellProps {
     email: string;
   };
   profileComplete: boolean;
+  /** Show Admin nav + highlight when on /admin */
+  isAdmin?: boolean;
   children: React.ReactNode;
 }
 
 export function DashboardShell({
   user,
   profileComplete,
+  isAdmin,
   children,
 }: DashboardShellProps) {
   const {
@@ -31,6 +34,7 @@ export function DashboardShell({
       <DashboardNav
         user={user}
         profileComplete={profileComplete}
+        isAdmin={isAdmin}
         onRestartTutorial={restartOnboarding}
       />
       <main className="container mx-auto px-4 py-8 max-w-6xl">{children}</main>

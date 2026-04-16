@@ -10,6 +10,7 @@ A Next.js web application that allows artists to submit their artwork for sale t
 - **WooCommerce Integration** - Products are automatically created as drafts in WordPress
 - **Image Compression** - Images are compressed to max 1920px before upload
 - **Email Notifications** - Admin receives email when new products are submitted
+- **Admin Panel** - `ADMIN_EMAILS` users can review all profiles and submissions at `/admin`
 - **55% Artist Payout** - Transparent pricing with automatic payout calculation
 
 ## Tech Stack
@@ -69,6 +70,9 @@ EMAIL_HOST=smtp.example.com
 EMAIL_PORT=587
 EMAIL_USERNAME=your-email@example.com
 EMAIL_PASSWORD=your-email-password
+
+# Comma-separated admin emails (submission notifications + /admin access)
+ADMIN_EMAILS=admin@example.com,other@example.com
 ```
 
 4. Run database migrations:

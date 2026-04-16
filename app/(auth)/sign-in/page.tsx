@@ -39,7 +39,7 @@ export default function SignInPage() {
       }
 
       toast.success('Welcome back!');
-      router.push('/profile');
+      router.push('/');
       router.refresh();
     } catch {
       toast.error('An unexpected error occurred');

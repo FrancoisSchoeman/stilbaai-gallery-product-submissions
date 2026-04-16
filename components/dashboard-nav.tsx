@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Package, User, LogOut, Menu, X, HelpCircle } from 'lucide-react';
+import { Package, User, LogOut, Menu, X, HelpCircle, Shield } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
@@ -24,10 +24,11 @@ interface DashboardNavProps {
     email: string;
   };
   profileComplete: boolean;
+  isAdmin?: boolean;
   onRestartTutorial?: () => void;
 }
 
-const navItems = [
+const baseNavItems = [
   {
     href: '/profile',
     label: 'Profile',
@@ -45,11 +46,24 @@ const navItems = [
 export function DashboardNav({
   user,
   profileComplete,
+  isAdmin,
   onRestartTutorial,
 }: DashboardNavProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const adminNavItem = {
+    href: '/admin',
+    label: 'Admin',
+    icon: Shield,
+    requiresProfile: false,
+    matchPrefix: '/admin',
+  } as const;
+
+  const navItems = isAdmin
+    ? [adminNavItem, ...baseNavItems]
+    : baseNavItems;
 
   const handleSignOut = async () => {
     await signOut();
@@ -72,7 +86,7 @@ export function DashboardNav({
       <div className="container mx-auto px-4 max-w-6xl">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/dashboard" className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2">
             <span className="font-serif text-xl font-semibold text-stone-900">
               Stilbaai Gallery
             </span>
@@ -81,7 +95,11 @@ export function DashboardNav({
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-1">
             {navItems.map((item) => {
-              const isActive = pathname === item.href;
+              const isActive =
+                'matchPrefix' in item && item.matchPrefix
+                  ? pathname === item.href ||
+                    pathname.startsWith(`${item.matchPrefix}/`)
+                  : pathname === item.href;
               const isDisabled = item.requiresProfile && !profileComplete;
 
               return (
@@ -99,7 +117,7 @@ export function DashboardNav({
                     isActive
                       ? 'bg-stone-100 text-stone-900'
                       : 'text-stone-600 hover:text-stone-900 hover:bg-stone-50',
-                    isDisabled && 'opacity-50 cursor-not-allowed'
+                    isDisabled && 'opacity-50 cursor-not-allowed',
                   )}
                 >
                   <item.icon className="h-4 w-4" />
@@ -174,7 +192,11 @@ export function DashboardNav({
           <nav className="md:hidden py-4 border-t border-stone-100">
             <div className="flex flex-col gap-1">
               {navItems.map((item) => {
-                const isActive = pathname === item.href;
+                const isActive =
+                  'matchPrefix' in item && item.matchPrefix
+                    ? pathname === item.href ||
+                      pathname.startsWith(`${item.matchPrefix}/`)
+                    : pathname === item.href;
                 const isDisabled = item.requiresProfile && !profileComplete;
 
                 return (
@@ -194,7 +216,7 @@ export function DashboardNav({
                       isActive
                         ? 'bg-stone-100 text-stone-900'
                         : 'text-stone-600 hover:text-stone-900 hover:bg-stone-50',
-                      isDisabled && 'opacity-50 cursor-not-allowed'
+                      isDisabled && 'opacity-50 cursor-not-allowed',
                     )}
                   >
                     <item.icon className="h-4 w-4" />

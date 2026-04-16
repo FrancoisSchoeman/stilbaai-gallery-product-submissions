@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { getServerSession } from '@/lib/auth-server';
+import { isAdminEmail } from '@/lib/admin';
 import { DashboardShell } from '@/components/dashboard-shell';
 import { db } from '@/lib/db';
 import { userProfiles } from '@/lib/db/schema';
@@ -22,9 +23,14 @@ export default async function DashboardLayout({
   });
 
   const profileComplete = profile?.isComplete ?? false;
+  const isAdmin = isAdminEmail(session.user.email);
 
   return (
-    <DashboardShell user={session.user} profileComplete={profileComplete}>
+    <DashboardShell
+      user={session.user}
+      profileComplete={profileComplete}
+      isAdmin={isAdmin}
+    >
       {children}
     </DashboardShell>
   );
